@@ -40,18 +40,18 @@ INSERT INTO `sys_department` (`id`,`dept_code`,`dept_name`,`manager_name`,`phone
 -- 若登录失败，用 backend 里的 PasswordGen 重新生成后替换下面这一串
 -- ------------------------------------------------------------
 INSERT INTO `sys_user` (`id`,`username`,`password`,`real_name`,`phone`,`dept_id`,`role`,`status`,`create_time`) VALUES
-(1 ,'admin'    ,'$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2','系统管理员','13900000001',1,'ADMIN'   ,1,'2026-01-06 09:00:00'),
-(2 ,'auditor01','$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2','刘洋'    ,'13900000002',4,'AUDITOR' ,1,'2026-01-06 09:00:00'),
-(3 ,'auditor02','$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2','陈静'    ,'13900000003',5,'AUDITOR' ,1,'2026-01-06 09:00:00'),
-(4 ,'auditor03','$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2','赵磊'    ,'13900000004',6,'AUDITOR' ,1,'2026-01-06 09:00:00'),
-(5 ,'emp01'    ,'$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2','王小明'  ,'13900000005',4,'EMPLOYEE',1,'2026-01-07 09:00:00'),
-(6 ,'emp02'    ,'$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2','李小红'  ,'13900000006',4,'EMPLOYEE',1,'2026-01-07 09:00:00'),
-(7 ,'emp03'    ,'$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2','张大力'  ,'13900000007',5,'EMPLOYEE',1,'2026-01-07 09:00:00'),
-(8 ,'emp04'    ,'$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2','赵小美'  ,'13900000008',5,'EMPLOYEE',1,'2026-01-07 09:00:00'),
-(9 ,'emp05'    ,'$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2','陈小刚'  ,'13900000009',6,'EMPLOYEE',1,'2026-01-07 09:00:00'),
-(10,'emp06'    ,'$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2','林小雨'  ,'13900000010',2,'EMPLOYEE',1,'2026-01-07 09:00:00'),
-(11,'emp07'    ,'$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2','黄小峰'  ,'13900000011',3,'EMPLOYEE',1,'2026-01-07 09:00:00'),
-(12,'emp08'    ,'$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2','周小云'  ,'13900000012',1,'EMPLOYEE',1,'2026-01-07 09:00:00');
+(1 ,'admin'    ,'$2a$10$pbIQ3cmrmPTYkopQGC6V6en2m4GecjefGFkQmTiJ5JYvajxVoKKs2','系统管理员','13900000001',1,'ADMIN'   ,1,'2026-01-06 09:00:00'),
+(2 ,'auditor01','$2a$10$pbIQ3cmrmPTYkopQGC6V6en2m4GecjefGFkQmTiJ5JYvajxVoKKs2','刘洋'    ,'13900000002',4,'AUDITOR' ,1,'2026-01-06 09:00:00'),
+(3 ,'auditor02','$2a$10$pbIQ3cmrmPTYkopQGC6V6en2m4GecjefGFkQmTiJ5JYvajxVoKKs2','陈静'    ,'13900000003',5,'AUDITOR' ,1,'2026-01-06 09:00:00'),
+(4 ,'auditor03','$2a$10$pbIQ3cmrmPTYkopQGC6V6en2m4GecjefGFkQmTiJ5JYvajxVoKKs2','赵磊'    ,'13900000004',6,'AUDITOR' ,1,'2026-01-06 09:00:00'),
+(5 ,'emp01'    ,'$2a$10$pbIQ3cmrmPTYkopQGC6V6en2m4GecjefGFkQmTiJ5JYvajxVoKKs2','王小明'  ,'13900000005',4,'EMPLOYEE',1,'2026-01-07 09:00:00'),
+(6 ,'emp02'    ,'$2a$10$pbIQ3cmrmPTYkopQGC6V6en2m4GecjefGFkQmTiJ5JYvajxVoKKs2','李小红'  ,'13900000006',4,'EMPLOYEE',1,'2026-01-07 09:00:00'),
+(7 ,'emp03'    ,'$2a$10$pbIQ3cmrmPTYkopQGC6V6en2m4GecjefGFkQmTiJ5JYvajxVoKKs2','张大力'  ,'13900000007',5,'EMPLOYEE',1,'2026-01-07 09:00:00'),
+(8 ,'emp04'    ,'$2a$10$pbIQ3cmrmPTYkopQGC6V6en2m4GecjefGFkQmTiJ5JYvajxVoKKs2','赵小美'  ,'13900000008',5,'EMPLOYEE',1,'2026-01-07 09:00:00'),
+(9 ,'emp05'    ,'$2a$10$pbIQ3cmrmPTYkopQGC6V6en2m4GecjefGFkQmTiJ5JYvajxVoKKs2','陈小刚'  ,'13900000009',6,'EMPLOYEE',1,'2026-01-07 09:00:00'),
+(10,'emp06'    ,'$2a$10$pbIQ3cmrmPTYkopQGC6V6en2m4GecjefGFkQmTiJ5JYvajxVoKKs2','林小雨'  ,'13900000010',2,'EMPLOYEE',1,'2026-01-07 09:00:00'),
+(11,'emp07'    ,'$2a$10$pbIQ3cmrmPTYkopQGC6V6en2m4GecjefGFkQmTiJ5JYvajxVoKKs2','黄小峰'  ,'13900000011',3,'EMPLOYEE',1,'2026-01-07 09:00:00'),
+(12,'emp08'    ,'$2a$10$pbIQ3cmrmPTYkopQGC6V6en2m4GecjefGFkQmTiJ5JYvajxVoKKs2','周小云'  ,'13900000012',1,'EMPLOYEE',1,'2026-01-07 09:00:00');
 
 -- ------------------------------------------------------------
 -- 3. 预约单 14 条（status 4:4 / 3:6 / 2:1 / 1:1 / 0:1 / 9:1）
