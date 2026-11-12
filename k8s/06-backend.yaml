@@ -1,0 +1,86 @@
+# 06-backend.yaml —— 后端 Deployment + Service
+# Service 端口约定：port 8080 -> targetPort 8080
+# 与 env-contract.md 一致：Compose 与 K8s 都用 8080，A 的 nginx 模板 ${BACKEND_HOST}:${BACKEND_PORT}
+# 在两边取同一个值，不需要按环境切换端口。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: g12-backend
+  namespace: enterprise-g12
+  labels:
+    app: g12-backend
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: g12-backend
+  template:
+    metadata:
+      labels:
+        app: g12-backend
+        tier: backend
+    spec:
+      containers:
+        - name: backend
+          image: g12-api:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: g12-config
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: g12-secret
+                  key: DB_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: g12-secret
+                  key: JWT_SECRET
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /api/actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /api/actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: g12-backend
+  namespace: enterprise-g12
+  labels:
+    app: g12-backend
+spec:
+  type: ClusterIP
+  selector:
+    app: g12-backend
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP

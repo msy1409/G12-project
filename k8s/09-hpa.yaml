@@ -1,0 +1,37 @@
+# 09-hpa.yaml —— 后端水平自动扩缩容
+# 前提：06-backend.yaml 里有 resources.requests.cpu（HPA 计算利用率的分母），
+#       且集群装了 metrics-server，否则 kubectl get hpa 会一直显示 <unknown>。
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: g12-backend-hpa
+  namespace: enterprise-g12
+  labels:
+    app: g12-backend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: g12-backend
+  minReplicas: 2
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 30
+    scaleDown:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60
