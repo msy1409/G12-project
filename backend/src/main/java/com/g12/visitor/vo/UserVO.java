@@ -1,5 +1,6 @@
 package com.g12.visitor.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -19,4 +20,8 @@ public class UserVO {
     private String role;
     private Integer status;
     private LocalDateTime createTime;
+
+    /** v2 新增：当前接口版本标识，/auth/me 与 /auth/login 返回中可见 */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String apiVersion;
 }

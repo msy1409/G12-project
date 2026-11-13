@@ -19,6 +19,9 @@ public class AuthService {
 
     private static final BCryptPasswordEncoder ENCODER = new BCryptPasswordEncoder();
 
+    /** v2 新增：接口版本标识，随 /auth/me、/auth/login 返回 */
+    private static final String API_VERSION = "v2";
+
     private final SysUserMapper userMapper;
     private final JwtUtil jwtUtil;
 
@@ -33,12 +36,16 @@ public class AuthService {
         String token = jwtUtil.generate(user.getId(), user.getUsername(), user.getRole(), user.getDeptId());
         LoginVO vo = new LoginVO();
         vo.setToken(token);
-        vo.setUser(userMapper.selectUserVOById(user.getId()));
+        UserVO userVO = userMapper.selectUserVOById(user.getId());
+        userVO.setApiVersion(API_VERSION);
+        vo.setUser(userVO);
         return vo;
     }
 
     public UserVO currentUser() {
-        return userMapper.selectUserVOById(AuthContext.get().getId());
+        UserVO vo = userMapper.selectUserVOById(AuthContext.get().getId());
+        vo.setApiVersion(API_VERSION);
+        return vo;
     }
 
     public static String encode(String rawPassword) {
