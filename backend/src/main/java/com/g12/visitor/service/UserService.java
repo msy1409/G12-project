@@ -96,6 +96,27 @@ public class UserService {
         userMapper.updateById(patch);
     }
 
+    /**
+     * 启用/停用（契约 PUT /users/{id}/status）：1 启用、0 停用。
+     * 停用自己与 DELETE 一样拒绝，避免管理员把自己锁死。
+     */
+    public void changeStatus(Long id, Integer status) {
+        if (status == null || (status != 0 && status != 1)) {
+            throw BizException.badRequest(ErrorCode.INVALID_PARAM);
+        }
+        if (status == 0 && AuthContext.get().getId().equals(id)) {
+            throw BizException.badRequest(ErrorCode.INVALID_PARAM);
+        }
+        SysUser user = userMapper.selectById(id);
+        if (user == null) {
+            throw BizException.notFound();
+        }
+        SysUser patch = new SysUser();
+        patch.setId(id);
+        patch.setStatus(status);
+        userMapper.updateById(patch);
+    }
+
     public void resetPassword(Long id) {
         SysUser user = userMapper.selectById(id);
         if (user == null) {

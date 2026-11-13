@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -51,6 +53,12 @@ public class UserController {
     @PutMapping("/{id}")
     public Result<Void> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO dto) {
         userService.update(id, dto);
+        return Result.ok();
+    }
+
+    @PutMapping("/{id}/status")
+    public Result<Void> changeStatus(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
+        userService.changeStatus(id, body == null ? null : body.get("status"));
         return Result.ok();
     }
 

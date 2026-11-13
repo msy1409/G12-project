@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/audit")
+@RequestMapping("/applies")
 @RequiredArgsConstructor
 @RequireRole({RoleConstant.AUDITOR, RoleConstant.ADMIN})
 public class AuditController {
@@ -35,7 +35,7 @@ public class AuditController {
         return Result.ok(auditService.pending(page, size, keyword));
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public Result<PageResult<ApplyListItemVO>> list(@RequestParam(required = false) Integer status,
                                                     @RequestParam(required = false) String keyword,
                                                     @RequestParam(required = false) String startDate,
