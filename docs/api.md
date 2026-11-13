@@ -92,7 +92,7 @@ Authorization: Bearer <jwt>
   "data": {
     "token": "eyJhbGciOi...",
     "user": { "id": 3, "username": "zhangsan", "realName": "张三",
-              "role": "EMPLOYEE", "deptId": 1, "deptName": "研发部" }
+              "role": "EMPLOYEE", "deptId": 1, "deptName": "研发部", "apiVersion": "v2" }
   } }
 ```
 
@@ -105,10 +105,12 @@ Authorization: Bearer <jwt>
 ```json
 { "code": 200, "message": "ok",
   "data": { "id": 3, "username": "zhangsan", "realName": "张三", "phone": "13800000003",
-            "role": "EMPLOYEE", "deptId": 1, "deptName": "研发部", "status": 1 } }
+            "role": "EMPLOYEE", "deptId": 1, "deptName": "研发部", "status": 1, "apiVersion": "v2" } }
 ```
 
 错误：`401 TOKEN_EXPIRED`。
+
+> `apiVersion`：接口版本标识，v2 固定返回 `"v2"`；v1 响应中不含该字段（`@JsonInclude(NON_NULL)`）。
 
 ### 2.3 POST `/auth/logout`　[登录]
 
