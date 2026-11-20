@@ -75,7 +75,7 @@ TOTAL=29  OK=29  FAIL=0
 
 ## 5. 已知问题（未在本次范围内修改）
 
-1. 空路径变量（如 `PUT /users//status`）返回 500 `INTERNAL_ERROR`，而不是 400/404。属健壮性问题，不影响正常调用。
+1. ~~空路径变量返回 500~~（已修复）：空路径/错误路径（如 `PUT /users//status`、`GET /users//`）此前未命中控制器方法，被静态资源兜底抛 `NoResourceFoundException`，经兜底处理器归成 500 `INTERNAL_ERROR`。已在 `GlobalExceptionHandler` 补 `NoResourceFoundException → 404 NOT_FOUND`、`MethodArgumentTypeMismatchException → 400 INVALID_PARAM`；运行时实测上述空路径返回 HTTP 404，正常接口（登录、用户列表）仍为 200，不受影响。
 2. 容器内冷启动较慢：`WebApplicationContext` 初始化耗时约 40 秒（本机约 3 秒），首次探测会出现 `health: starting`，`compose.yaml` 已将 `start_period` 放宽到 90s、`timeout` 放宽到 10s。
 3. 本次自查向库中写入了测试数据（用户 id=14、部门 id=12、申请 18/19/20 及其处理记录与状态审计）。**正式演示前需重灌 `database/schema.sql` + `database/seed.sql` 恢复干净种子数据。**
 
@@ -85,7 +85,7 @@ TOTAL=29  OK=29  FAIL=0
 
 | 镜像 | 构建时间 | 说明 |
 | --- | --- | --- |
-| `g12-api:v1` | 2026-11-13 17:32:44 | 不含 `apiVersion` 字段赋值（用于 A7 基线演示） |
-| `g12-api:v2` | 2026-11-13 17:36:30 | 含 `apiVersion` 字段赋值（发布变更演示） |
+| `g12-api:v1` | 2026-11-20 14:34:51 | 不含 `apiVersion` 字段赋值（用于 A7 基线演示） |
+| `g12-api:v2` | 2026-11-20 14:28:38 | 含 `apiVersion` 字段赋值（发布变更演示） |
 
 字节码校验：`AuthService.class` 中 `setApiVersion` 常量，v1 = False、v2 = True。

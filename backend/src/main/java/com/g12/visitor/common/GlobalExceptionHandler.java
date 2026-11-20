@@ -7,6 +7,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * 全局异常处理：把异常统一翻译成 {code,message,data}，HTTP 状态与 code 同步。
@@ -31,6 +33,20 @@ public class GlobalExceptionHandler {
         log.warn("param invalid: {}", detail);
         return ResponseEntity.badRequest()
                 .body(Result.fail(400, ErrorCode.INVALID_PARAM));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Result<Void>> handleTypeMismatch(MethodArgumentTypeMismatchException e) {
+        log.warn("argument type mismatch: name={} value={}", e.getName(), e.getValue());
+        return ResponseEntity.badRequest()
+                .body(Result.fail(400, ErrorCode.INVALID_PARAM));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<Result<Void>> handleNoResource(NoResourceFoundException e) {
+        log.warn("no handler/resource: {}", e.getMessage());
+        return ResponseEntity.status(404)
+                .body(Result.fail(404, ErrorCode.NOT_FOUND));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
