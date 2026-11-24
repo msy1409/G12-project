@@ -25,10 +25,10 @@ spec:
           env:
             - name: BACKEND_HOST
               value: g12-backend
-            # B 的 06-backend.yaml 里 Service 是 port 80 / targetPort 8080，
-            # 所以 nginx 必须打 Service 的 80 端口；Compose 里仍用 8080（容器端口）。
+            # B 的 06-backend.yaml 里 Service 是 port 8080 -> targetPort 8080（2026-11 确认），
+            # 所以 nginx 必须打 8080；写成 80 会 502（Service 没开 80 端口）。
             - name: BACKEND_PORT
-              value: "80"
+              value: "8080"
           readinessProbe:
             httpGet:
               path: /
