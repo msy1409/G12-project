@@ -48,17 +48,33 @@
 `evidence/02-compose/` 的“三服务 Up”图缺**前端服务**，因为 A 的前端代码/镜像还没交，compose 里第三个服务起不来。
 → **处置**：等 A 交付后由 B 重跑一次 `docker compose up -d` 并补图；C 只归档。**这不阻塞 C 的 K8s 主线**（K8s 里不需要 compose）。
 
-### 2.3 等 A（前端）—— 现在唯一的阻塞
+### 2.3 A 侧（前端）—— 只剩一个 tar 包
 
-| # | 要什么 | 为什么要 | 我怎么验收 |
-|---|---|---|---|
-| A-1 | `g12-web-v1.tar` | `minikube image load` 才能起前端；**k8s 全栈部署的最后一块** | `Loaded image: g12-web:v1` |
-| A-2 | `k8s/07-frontend.yaml` push | 全栈部署的一环；Service 名必须 `g12-frontend`、port 80、`BACKEND_HOST=g12-backend`、`BACKEND_PORT=8080` | `kubectl get svc g12-frontend` 有 80 端口 |
-| A-3 | **确认 08-ingress 谁写** | 手册第 21 条写 A，B 的入口文档写 C。两边都写会 git 冲突 | 群里回一句 |
-| A-4 | 确认镜像里 nginx 真按 env 渲染 | 同一镜像 Compose 对 `backend`、K8s 对 `g12-backend:8080`，靠 `BACKEND_HOST`/`BACKEND_PORT` 换 | `docker exec <id> cat /etc/nginx/conf.d/default.conf \| grep proxy_pass` 应看到 `g12-backend:8080` |
-| A-5 | 前端 `request.js` 的 `baseURL` 是 `/api` | Ingress 只有 `/` 一条 path，靠前端 nginx 转 `/api/` | 浏览器 Network 里请求是 `/api/...` 相对路径 |
+A 在 `102f8d9` 交付了：`frontend/`（9 个页面 + 7 个组件 + 路由/拦截器/请求封装/MainLayout/mock）、`frontend/Dockerfile` + `Dockerfile.mock`、`nginx.conf.template`、`k8s/07-frontend.yaml`、`k8s/08-ingress.yaml`、`docs/business-flow-record.md`。
 
-> **A 没交之前 C 能做什么**：MySQL + 后端可以先单独跑通（`kubectl apply -f k8s/01..06`，用 `kubectl port-forward svc/g12-backend 8080:8080` 或临时 Pod 验证 27 个接口），runbook §5/§6/§7 的前半段、evidence 的 01/03/04 大部分图都能先采。**前端相关的 07、08、浏览器两张图、以及 F2 的 502 现象必须等 A。**
+| # | 要什么 | 状态 |
+|---|---|---|
+| A-1 | `g12-web-v1.tar` | ❌ **仍缺，唯一阻塞** —— 镜像 tar 不进 git，必须 A 单独发 |
+| A-2 | `k8s/07-frontend.yaml` | ✅ 已交付，但**内有 502 bug，C 已修**（见下） |
+| A-3 | 08-ingress 归属 | ✅ 已定：A 写，用 A 的（见 §3） |
+| A-4 | nginx 按 env 渲染 | ✅ 已验证：`proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};` |
+| A-5 | `request.js` 的 `baseURL` | ✅ 已验证：`baseURL: '/api'` |
+
+> **A-2 的 bug（重要，C 已在 `7021841` 修掉）**：A 的 07 里写
+> `BACKEND_PORT: "80"`，注释理由是"B 的 06 是 port 80 / targetPort 8080"。
+> 但 B 的 06 实际是 `port: 8080 → targetPort: 8080`，Service 上**根本没有 80 端口** —— 照 A 的写法，nginx 会 `connect() failed` 到 `g12-backend:80`，**全站 `/api` 502**。
+> C 已改成 `"8080"` 并修正注释。**要通知 A**，别让他下次 pull 之后又改回去。
+
+> **A 没交镜像之前 C 能做什么**：MySQL + 后端可以先跑（`kubectl apply -f k8s/01-06 -f k8s/09`，`kubectl port-forward svc/g12-backend 8080:8080` 验 27 个接口），runbook §7.1 有完整步骤，`evidence/01-image`（后端 2 张）、`03-k8s-deploy` 的 5 张、`04-logs-events` 的 6 张都能先采。
+
+### 2.3.1 已推送记录（2026-11-24）
+
+| commit | 内容 |
+|---|---|
+| `8c59155` | feat(C)：k8s 01–05、docs 四份、evidence 全量（52 个文件） |
+| `7021841` | fix(k8s)：07-frontend 的 `BACKEND_PORT` 80 → 8080（C 修 A 的 bug） |
+
+远端 `main` = `7021841`。`k8s/` 现有 01–09 齐全（06/07/09 是 B/A 的，08 是 A 的）；`docs/` 12 份；`evidence/` 7 个目录 + README + `collect.sh`。
 
 ### 2.4 我自己要做的两个校验（不需要问人）
 
@@ -90,16 +106,18 @@
 
 ---
 
-## 3. 08-ingress 归属（必须有人拍板）
+## 3. 08-ingress 归属（已解决 ✅）
 
 | 出处 | 说法 |
 |---|---|
-| 执行手册 第一章 第 21 条 | **A**（且 A 的 commit 命令里含 `k8s/08-ingress.yaml`） |
-| B 发的《执行手册入口》 | **C**（“底座：01–05/08”） |
+| 执行手册 第一章 第 21 条 | **A**（A 的 commit 命令里也含 `k8s/08-ingress.yaml`） |
+| B 发的《执行手册入口》 | **C**（"底座：01–05/08"） |
 
-**建议**：**A 写。** 理由：A 的 commit 里已经包含这个文件，A 还要用它验“页面能访问”；C 只负责 `kubectl apply`。C 已在 `k8s/08-ingress.yaml` 备了一份**内容相同**的作为兜底，A 若已写，C 删掉即可（内容本来就该一样，删掉不影响）。
+**最终结论（2026-11-24 A 的 `102f8d9` 已交付）：A 写，用 A 的。**
+A 的版本与 C 的兜底版等价（`ingressClassName: nginx`、host `g12.course.local`、`/` Prefix → `g12-frontend:80`），另外多一条 `nginx.ingress.kubernetes.io/proxy-body-size: "10m"`，更完整。
+**C 的 `k8s/08-ingress.yaml` 未推送**（推送时显式跳过），本地文件也已替换成 A 的版本，避免两份不同内容并存。
 
-**不管谁写，内容必须是这三行**：`ingressClassName: nginx`、host `g12.course.local`、`/` Prefix → `g12-frontend:80`。
+> 教训记一条：归属没拍板前，两边各写一份会互相覆盖 —— 这次靠"推送前先比对远端路径"躲过去了。
 
 ---
 

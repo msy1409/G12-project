@@ -17,7 +17,7 @@
 | 前端镜像 | `g12-web:v1` | A 构建 |
 | 后端 Service | `g12-backend`，port **8080** → targetPort **8080** | B（2026-11-13 确认，**不是手册原文的 80**） |
 | 前端 Service | `g12-frontend`，port **80** → targetPort **80** | A |
-| Ingress | `g12-ingress`，host `g12.course.local`，pathType Prefix → `g12-frontend:80` | A/C（见 §9 归属说明） |
+| Ingress | `g12-ingress`，host `g12.course.local`，pathType Prefix → `g12-frontend:80` | A（2026-11-24 已交付，见 §9） |
 | 健康检查路径 | `/api/actuator/health`（后端 `context-path: /api`） | B |
 | 后端 resources | requests **200m / 512Mi**，limits **500m / 1Gi** | B（HPA 60% × 200m = **120m/副本** 才触发，压测要加并发，见 `evidence/06-hpa/README.md`） |
 | v2 的可见改动 | `/auth/login`、`/auth/me` 的返回里多 `apiVersion:"v2"` | B（发布/回滚的验证判据） |
@@ -311,12 +311,14 @@ VM 里 `curl -H 'Host: g12.course.local' http://$(minikube ip)/` 能出 HTML，�
 
 ---
 
-## 9. 08-ingress 的归属（先对一句再动）
+## 9. 08-ingress 的归属（已定：A 写）
 
-- 《执行手册》第一章第 21 条把 `08-ingress.yaml` 写在 **A** 的清单里，A 的 commit 也包含它。
-- B 发的《执行手册入口》写「C 底座：01–05/08」。
-- **现状**：仓库里已放了一份 C 版本（`k8s/08-ingress.yaml`），内容就是 `g12.course.local` → `g12-frontend:80`。
-- **规则**：谁先 push 谁留着，**另一个人不要改同一个文件**（改了会 git 冲突）。若 A 已写，C 这份直接删掉，内容本来就该一样。
+- 《执行手册》第一章第 21 条把 `08-ingress.yaml` 写在 **A** 的清单里；B 的《入口》文档曾写"C 底座：01–05/08"。
+- **2026-11-24 已定**：A 在 `102f8d9` 交付了 `k8s/08-ingress.yaml`，C 的兜底版**未推送**，本地已替换为 A 的版本。
+- A 的版本内容：`ingressClassName: nginx`、host `g12.course.local`、`/` Prefix → `g12-frontend:80`，另加 `proxy-body-size: 10m`。
+- **C 只负责 `kubectl apply`**，不要再改这个文件（两边同时改就是 git 冲突）。
+
+> 顺带记一条同类教训：`07-frontend.yaml` 里 A 曾把 `BACKEND_PORT` 写成 `"80"`，与 B 的 `Service 8080→8080` 不一致，会导致全站 `/api` 502；C 在 `7021841` 已改成 `"8080"`。**部署前先 `kubectl get svc g12-backend -o yaml | grep -A3 ports` 核一眼端口**，比事后查 502 快。
 
 ---
 
