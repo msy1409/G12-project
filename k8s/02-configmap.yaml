@@ -1,0 +1,16 @@
+# g12-config：后端和 MySQL 共用的非敏感配置
+# key 名与 docs/env-contract.md 第 1 节一字不差，改一个字母三边一起挂
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: g12-config
+  namespace: enterprise-g12
+  labels:
+    app: g12-config
+data:
+  DB_HOST: g12-mysql        # K8s 里是 Service 名，Compose 里是 mysql，本机是 127.0.0.1
+  DB_PORT: "3306"
+  DB_NAME: ctts_g12
+  DB_USER: root
+  SERVER_PORT: "8080"
+  JWT_EXPIRE_SECONDS: "7200" # 2 小时，和 docs/api.md 的 token 有效期一致

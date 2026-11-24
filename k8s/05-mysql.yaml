@@ -1,0 +1,98 @@
+# MySQL 8.0：Deployment + Service
+#
+# 两个必须知道的点：
+# 1) strategy: Recreate —— RWO 卷同一时刻只能被一个 Pod 挂，滚动更新会卡死（新 Pod 等旧 Pod 释放卷），
+#    必须 Recreate：先停旧的，再起新的。
+# 2) 只挂 configMap g12-mysql-init 到 /docker-entrypoint-initdb.d —— mysql 镜像只在 datadir 为空时执行那里的 .sql。
+#    所以「表是空的」几乎只有一个原因：/var/lib/mysql 里已经有东西（哪怕是个失败留下的空库）。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: g12-mysql
+  namespace: enterprise-g12
+  labels:
+    app: g12-mysql
+    tier: db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: g12-mysql
+  template:
+    metadata:
+      labels:
+        app: g12-mysql
+        tier: db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - --character-set-server=utf8mb4
+            - --collation-server=utf8mb4_unicode_ci
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: g12-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              value: ctts_g12
+          ports:
+            - name: mysql
+              containerPort: 3306
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD"
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 12
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            failureThreshold: 6
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+            - name: init-sql
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: g12-mysql-pvc
+        - name: init-sql
+          configMap:
+            name: g12-mysql-init   # 必须先 kubectl create configmap 出来，否则 Pod 一直 ContainerCreating
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: g12-mysql
+  namespace: enterprise-g12
+  labels:
+    app: g12-mysql
+spec:
+  type: ClusterIP
+  selector:
+    app: g12-mysql
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: 3306

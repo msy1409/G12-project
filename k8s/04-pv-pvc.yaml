@@ -1,0 +1,54 @@
+# MySQL 持久化：StorageClass + 静态 PV + PVC
+#
+# 为什么要自己建 StorageClass：
+#   手册只写了 PV/PVC 带 storageClassName: g12-local，但 minikube 里默认只有 standard 这个类，
+#   g12-local 不存在时 PVC 会一直 Pending（没有 provisioner 来满足它）。
+#   这里补一个 no-provisioner 的类，PVC 才会去绑我们手写的那个静态 PV。
+#
+# 为什么要 volumeName：
+#   一个 no-provisioner 类下面若以后再加 PV，PVC 可能绑错盘；直接写死 volumeName 保证只绑 g12-mysql-pv。
+#
+# 为什么 reclaimPolicy: Retain：
+#   演示「删 Deployment 后数据还在」时，PVC/PV 不能被回收删掉。
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: g12-local
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: Immediate
+reclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: g12-mysql-pv
+  labels:
+    app: g12-mysql
+    type: local
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: g12-local
+  hostPath:
+    # minikube(docker driver) 下这是「节点容器内部」的路径，不是 Windows / VM 宿主机的 /data
+    path: /data/g12-mysql
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: g12-mysql-pvc
+  namespace: enterprise-g12
+  labels:
+    app: g12-mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: g12-local
+  volumeName: g12-mysql-pv
