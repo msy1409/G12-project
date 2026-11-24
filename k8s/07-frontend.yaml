@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: g12-frontend
+  namespace: enterprise-g12
+  labels:
+    app: g12-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: g12-frontend
+  template:
+    metadata:
+      labels:
+        app: g12-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: g12-web:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            - name: BACKEND_HOST
+              value: g12-backend
+            # B 的 06-backend.yaml 里 Service 是 port 80 / targetPort 8080，
+            # 所以 nginx 必须打 Service 的 80 端口；Compose 里仍用 8080（容器端口）。
+            - name: BACKEND_PORT
+              value: "80"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 20
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: g12-frontend
+  namespace: enterprise-g12
+  labels:
+    app: g12-frontend
+spec:
+  type: ClusterIP
+  selector:
+    app: g12-frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
