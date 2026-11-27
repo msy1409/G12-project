@@ -13,22 +13,23 @@ import com.g12.visitor.entity.VisitorApply;
 import com.g12.visitor.mapper.ApplyProcessRecordMapper;
 import com.g12.visitor.mapper.BizStatusChangeLogMapper;
 import com.g12.visitor.mapper.VisitorApplyMapper;
+import com.g12.visitor.vo.ApplyCreateVO;
 import com.g12.visitor.vo.ApplyDetailVO;
 import com.g12.visitor.vo.ApplyListItemVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
 public class ApplyService {
 
-    private static final DateTimeFormatter NO_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    private static final DateTimeFormatter DAY_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     private final VisitorApplyMapper applyMapper;
     private final ApplyProcessRecordMapper processMapper;
@@ -36,7 +37,7 @@ public class ApplyService {
     private final ApplyStateService stateService;
 
     @Transactional(rollbackFor = Exception.class)
-    public Long create(ApplyCreateDTO dto) {
+    public ApplyCreateVO create(ApplyCreateDTO dto) {
         CurrentUser user = AuthContext.get();
         Long deptId = dto.getDeptId();
         if (!RoleConstant.ADMIN.equals(user.getRole()) || deptId == null) {
@@ -46,8 +47,8 @@ public class ApplyService {
             throw BizException.badRequest(ErrorCode.INVALID_PARAM);
         }
         VisitorApply apply = new VisitorApply();
-        apply.setApplyNo("G12" + LocalDateTime.now().format(NO_FORMAT)
-                + String.format("%03d", ThreadLocalRandom.current().nextInt(1000)));
+        // 先写临时唯一值，拿到自增 id 后再生成契约要求的 AP+yyyyMMdd+6位序号
+        apply.setApplyNo("TMP" + System.nanoTime());
         apply.setVisitorName(dto.getVisitorName());
         apply.setVisitorPhone(dto.getVisitorPhone());
         apply.setVisitorCompany(dto.getVisitorCompany());
@@ -59,8 +60,11 @@ public class ApplyService {
         apply.setStatus(ApplyStatus.PENDING);
         apply.setCreateBy(user.getId());
         applyMapper.insert(apply);
+        apply.setApplyNo("AP" + LocalDate.now().format(DAY_FORMAT)
+                + String.format("%06d", apply.getId()));
+        applyMapper.updateById(apply);
         stateService.recordCreate(apply, user);
-        return apply.getId();
+        return new ApplyCreateVO(apply.getId(), apply.getApplyNo(), apply.getStatus());
     }
 
     public PageResult<ApplyListItemVO> mine(Integer status, Integer page, Integer size) {

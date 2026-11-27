@@ -7,6 +7,7 @@ import com.g12.visitor.common.RoleConstant;
 import com.g12.visitor.dto.ApplyCreateDTO;
 import com.g12.visitor.dto.RemarkDTO;
 import com.g12.visitor.service.ApplyService;
+import com.g12.visitor.vo.ApplyCreateVO;
 import com.g12.visitor.vo.ApplyDetailVO;
 import com.g12.visitor.vo.ApplyListItemVO;
 import jakarta.validation.Valid;
@@ -23,17 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/applies")
 @RequiredArgsConstructor
-@RequireRole({RoleConstant.EMPLOYEE, RoleConstant.ADMIN})
 public class ApplyController {
 
     private final ApplyService applyService;
 
     @PostMapping
-    public Result<Long> create(@Valid @RequestBody ApplyCreateDTO dto) {
+    @RequireRole({RoleConstant.EMPLOYEE, RoleConstant.ADMIN})
+    public Result<ApplyCreateVO> create(@Valid @RequestBody ApplyCreateDTO dto) {
         return Result.ok(applyService.create(dto));
     }
 
     @GetMapping("/mine")
+    @RequireRole({RoleConstant.EMPLOYEE, RoleConstant.ADMIN})
     public Result<PageResult<ApplyListItemVO>> mine(@RequestParam(required = false) Integer status,
                                                     @RequestParam(required = false) Integer page,
                                                     @RequestParam(required = false) Integer size) {
@@ -46,6 +48,7 @@ public class ApplyController {
     }
 
     @PutMapping("/{id}/cancel")
+    @RequireRole({RoleConstant.EMPLOYEE, RoleConstant.ADMIN})
     public Result<Void> cancel(@PathVariable Long id, @RequestBody(required = false) RemarkDTO dto) {
         applyService.cancel(id, dto == null ? null : dto.pick());
         return Result.ok();
