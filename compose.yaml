@@ -8,7 +8,7 @@ services:
     container_name: g12-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-CHANGE_ME}
       MYSQL_DATABASE: ${DB_NAME:-ctts_g12}
       TZ: Asia/Shanghai
     command:
@@ -20,7 +20,7 @@ services:
     networks:
       - g12-net
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-123456}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-CHANGE_ME}"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -39,8 +39,8 @@ services:
       DB_PORT: 3306
       DB_NAME: ${DB_NAME:-ctts_g12}
       DB_USER: root
-      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
-      JWT_SECRET: ${JWT_SECRET:-g12-visitor-platform-local-dev-secret-key-2026}
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-CHANGE_ME}
+      JWT_SECRET: ${JWT_SECRET:-CHANGE_ME}
       JWT_EXPIRE_SECONDS: 7200
       TZ: Asia/Shanghai
     depends_on:
@@ -66,7 +66,7 @@ services:
       BACKEND_HOST: backend
       BACKEND_PORT: 8080
     ports:
-      - "8081:80"
+      - "8080:80"
     depends_on:
       backend:
         condition: service_healthy

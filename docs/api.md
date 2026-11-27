@@ -1,7 +1,7 @@
 # G12 访客预约平台 · 接口文档（api.md）
 
 > 负责人：B（后端）　调用方：A（前端）　契约状态：**已冻结**
-> 版本：v1.0　共 **27 个业务接口** + 1 个健康检查接口
+> 版本：v1.0　共 **28 个业务接口** + 1 个健康检查接口
 > 改动规则：字段名不许随口改。要改 = 先改本文档 → 再改代码 → 再通知 A 重拉。否则 A 的页面全部作废。
 
 ---
@@ -122,7 +122,7 @@ JWT 无状态，服务端不做黑名单，仅返回成功让前端统一清 tok
 
 ---
 
-## 3. 用户管理 `users`（5 个，全 `[ADMIN]`）
+## 3. 用户管理 `users`（6 个，全 `[ADMIN]`）
 
 ### 3.1 GET `/users`　[ADMIN]
 
@@ -139,7 +139,19 @@ JWT 无状态，服务端不做黑名单，仅返回成功让前端统一清 tok
 
 > 响应里**永远不含 `password` 字段**。
 
-### 3.2 POST `/users`　[ADMIN]
+### 3.2 GET `/users/{id}`　[ADMIN]
+
+返回单个用户信息，结构同列表项，**不含 `password` 字段**。
+
+```json
+{ "code": 200, "data": { "id": 3, "username": "zhangsan", "realName": "张三",
+  "phone": "13800000003", "deptId": 1, "deptName": "研发部", "role": "EMPLOYEE",
+  "status": 1, "createTime": "2026-11-01 09:12:00" } }
+```
+
+错误：`404 NOT_FOUND`。
+
+### 3.3 POST `/users`　[ADMIN]
 
 ```json
 { "username": "lisi", "password": "123456", "realName": "李四",
@@ -151,7 +163,7 @@ JWT 无状态，服务端不做黑名单，仅返回成功让前端统一清 tok
 
 响应：`{ "code": 200, "data": { "id": 13 } }`　错误：`409 USERNAME_EXISTS`。
 
-### 3.3 PUT `/users/{id}`　[ADMIN]
+### 3.4 PUT `/users/{id}`　[ADMIN]
 
 只改基本信息，**不在此接口改密码**。
 
@@ -161,7 +173,7 @@ JWT 无状态，服务端不做黑名单，仅返回成功让前端统一清 tok
 
 响应：`{ "code": 200, "data": null }`　错误：`404 NOT_FOUND`。
 
-### 3.4 PUT `/users/{id}/status`　[ADMIN]
+### 3.5 PUT `/users/{id}/status`　[ADMIN]
 
 ```json
 { "status": 0 }
@@ -171,7 +183,7 @@ JWT 无状态，服务端不做黑名单，仅返回成功让前端统一清 tok
 
 响应：`{ "code": 200, "data": null }`
 
-### 3.5 DELETE `/users/{id}`　[ADMIN]
+### 3.6 DELETE `/users/{id}`　[ADMIN]
 
 **实现为 `status=0`，不是物理删除**（外键与审计要求）。
 

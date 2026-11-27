@@ -1,8 +1,6 @@
 # HPA 演示口径（G12-backend）
 
-对应清单：`k8s/09-hpa.yaml`。
-
-> 目录名按任务书写作 `06-hpa`；`k8s/` 里 HPA 清单本身编号是 09（06 号文件是 backend 的 Deployment/Service），两者不冲突。
+> 对应清单：`k8s/09-hpa.yaml`（06 号文件是 backend 的 Deployment/Service）；本说明归 `docs/`，证据截图在 `evidence/06-hpa/`。
 
 | 参数 | 值 |
 | --- | --- |

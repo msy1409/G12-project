@@ -265,7 +265,7 @@ kubectl get pods,svc,endpoints,pvc,ingress,hpa -n enterprise-g12
 | Ingress | ADDRESS 列有值（minikube 里是 `192.168.49.2` 之类） |
 | HPA | `g12-backend-hpa`，TARGETS 显示 `<x>%/60%`，MINPODS 2 |
 
-后端起来后单独确认探针路径对（错了会一直 `CrashLoopBackOff`/不 Ready）。后端镜像里是 JRE，没有 curl/wget，**从集群里另起一个临时 Pod 去打**：
+后端起来后单独确认探针路径对（错了会一直 `CrashLoopBackOff`/不 Ready）。**从集群里另起一个临时 Pod 去打**：
 
 ```bash
 kubectl run probe-check --rm -it --image=busybox:1.36 -n enterprise-g12 -- \
