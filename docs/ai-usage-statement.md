@@ -21,7 +21,7 @@
 
 ## A（前端）
 
-- **用的 AI**：<待 A 填>
-- **让它做的**：<待 A 填：前端页面、nginx 模板、前端镜像等>
-- **我自己改的**：<待 A 填>
-- **能讲清楚的**：<待 A 填>
+- **用的 AI**：DeepSeek V4.1 Flash（OpenCode Agent，包含终端执行与浏览器自动化）
+- **让 AI 做的**：Vue 3 + Vite 工程骨架；9 个页面（Login / ApplyNew / MyApplies / AuditList / AuditDetail / GateCheck / AdminUsers / AdminDepts / StatsDashboard）；5 个复用组件（StatusTag / PageHeader / DataTable / ConfirmDialog / PermissionButton）和 2 个图表组件；`src/api/request.js` 的 axios 封装与 401/403 拦截；`meta.roles` 路由守卫与按角色菜单；按 `docs/api.md` 实现的 27 个接口 mock 适配器；`nginx.conf.template`、`Dockerfile`、`Dockerfile.mock`；`k8s/07-frontend.yaml`、`k8s/08-ingress.yaml`；`docs/business-flow-record.md` 骨架
+- **我自己改的 / 验收确认的**：把镜像构建阶段从 `node:20` 调整到 `node:22`（Element Plus 2.14 依赖的 `@vueuse/core@15` 要求 Node ≥22）；构建参数增加 `NODE_OPTIONS=--dns-result-order=ipv4first`，解决容器 DNS 只返回 IPv6 导致 `npm ci` 中途崩溃；按 B 的 `06-backend.yaml` Service 端口把前端 `BACKEND_PORT` 对齐为 8080（C 已复核）；去掉接口契约中没有的部门“启用”按钮，只保留停用；用真实浏览器验收员工端、管理员端页面，并切换到真实后端跑通预约全流程
+- **能讲清楚的**：路由守卫与三种角色的菜单隔离；axios 请求/响应拦截器与 token 失效跳转；0/1/2/3/4/9 状态在页面和 `StatusTag` 上的表现；mock 适配器与真接口的切换方式；nginx `/api` 反向代理与 `BACKEND_HOST` / `BACKEND_PORT` 注入；Docker 多阶段构建；K8s 前端 Deployment / Service / Ingress 与探针
