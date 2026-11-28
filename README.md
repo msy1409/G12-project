@@ -27,6 +27,7 @@ G12-project/
 | 镜像产物 | 已就位 | `g12-web:v1`、`g12-api:v1`、`g12-api:v2` 的 tar 在仓库根目录（`.gitignore` 已排除 `*.tar`，不进 Git） |
 | K8s 现场演练与证据 | 已完成 | k3s 单节点全栈部署、v1→v2 发布/回滚、异常发布、手动扩缩容、HPA 压测、F2 故障复盘的真实输出与截图已回填 `evidence/03–07` |
 | 演示材料 | 已完成 | 答辩 PPT 定稿见 `docs/G12-A-答辩PPT.pptx`（同名 PDF）；现场演示与可选录屏分镜见 `docs/demo-script.md`。按课程纪要，录屏非强制项 |
+| 课程设计报告 | 已完成 | 成稿见 `docs/G12-课程设计实验报告.md`；成员学号、实测用例与环境口径已按最终实现回填，未演练项如实标注；个人贡献见 `docs/contribution-table.md` |
 
 ## 本地启动（Docker Compose）
 
