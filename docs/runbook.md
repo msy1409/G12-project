@@ -13,7 +13,7 @@
 | 命名空间 | `enterprise-g12` | C |
 | 集群 | minikube，docker driver，4 核 / 6 GiB | C |
 | MySQL | `mysql:8.0`，Deployment/Service `g12-mysql`，3306 | C |
-| 后端镜像 | `g12-api:v1`（v2 用于发布回滚） | B 构建 |
+| 后端镜像 | 基线清单 `g12-api:v2`（修复后代码）；`g12-api:v1` 作为发布/回滚演示的对照基线镜像 | B 构建 |
 | 前端镜像 | `g12-web:v1` | A 构建 |
 | 后端 Service | `g12-backend`，port **8080** → targetPort **8080** | B（2026-11-13 确认，**不是手册原文的 80**） |
 | 前端 Service | `g12-frontend`，port **80** → targetPort **80** | A |
@@ -71,6 +71,16 @@ kubectl get pods -n ingress-nginx                 # ingress-nginx-controller  1/
 kubectl get pods -n kube-system | grep metrics    # metrics-server  1/1 Running
 minikube ip                                       # 记下来，通常是 192.168.49.2
 ```
+
+> **离线 / k3s 兜底环境**（没有 minikube addons 可用）：改用仓库内的离线清单，效果等价：
+>
+> ```bash
+> kubectl apply -f k8s/addons/metrics-server.yaml
+> kubectl apply -f k8s/addons/ingress-class.yaml
+> kubectl apply -f k8s/addons/ingress-nginx-controller.yaml
+> ```
+>
+> 控制器以 `hostNetwork` 直接占节点 80/443，IngressClass 名为 `nginx`；状态地址由节点内网 IP 自动上报，清单里不写死某台机器的 IP。
 
 - VM 只有 10 GB 内存，`--memory=8192` 会把系统挤死；**用 6144**，手册写的 8192 在这台机器上不安全。
 - 拉 kicbase / k8s 镜像卡住（国内常见）：`minikube delete && minikube start --driver=docker --cpus=4 --memory=6144 --image-mirror-country=cn`

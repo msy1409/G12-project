@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: g12-api:v1
+          image: g12-api:v2
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -49,24 +49,29 @@ spec:
               cpu: "200m"
               memory: "512Mi"
             limits:
-              cpu: "500m"
+              cpu: "1"
               memory: "1Gi"
+          # 后端冷启动较慢（warm 约 15–18s，冷启动历史约 212s）：
+          # 用 startupProbe 容忍启动期，启动成功后再由 readinessProbe 判就绪；
+          # 不设 livenessProbe，避免慢启动期被误杀。
+          startupProbe:
+            httpGet:
+              path: /api/actuator/health
+              port: 8080
+              scheme: HTTP
+            failureThreshold: 24
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           readinessProbe:
             httpGet:
               path: /api/actuator/health
               port: 8080
-            initialDelaySeconds: 30
+              scheme: HTTP
+            initialDelaySeconds: 60
             periodSeconds: 10
             timeoutSeconds: 3
-            failureThreshold: 3
-          livenessProbe:
-            httpGet:
-              path: /api/actuator/health
-              port: 8080
-            initialDelaySeconds: 60
-            periodSeconds: 20
-            timeoutSeconds: 3
-            failureThreshold: 3
+            failureThreshold: 10
 ---
 apiVersion: v1
 kind: Service

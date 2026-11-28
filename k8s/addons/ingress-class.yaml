@@ -1,0 +1,8 @@
+# addons/ingress-class.yaml —— IngressClass 声明，绑定 ingress-nginx 控制器
+# 业务 Ingress（k8s/08-ingress.yaml）通过 `ingressClassName: nginx` 引用它。
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: nginx
+spec:
+  controller: k8s.io/ingress-nginx
