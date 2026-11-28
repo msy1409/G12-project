@@ -6,7 +6,7 @@ Docker 云容器与管理技术 · 期末课程设计 · Group 12
 
 ```
 G12-project/
-├─ frontend/          前端 Vue3 源码（A 负责）：11 个页面、7 个组件、axios 封装、路由守卫、mock 适配器
+├─ frontend/          前端 Vue3 源码（A 负责）：11 个页面（9 业务页 + 403/404 兜底页）、7 个组件（5 复用 + 2 图表）、axios 封装、路由守卫、mock 适配器
 ├─ backend/           后端 Spring Boot 源码（B 负责）：28 个业务接口、鉴权状态机、实体/Mapper/VO
 ├─ database/         schema.sql + seed.sql（B 负责）
 ├─ k8s/               全部 K8s yaml（C 01–05、08；B 06+09；A 07）
@@ -25,8 +25,8 @@ G12-project/
 | 前端代码 | 已完成 | 页面/组件/路由守卫/拦截/mock 齐全，已用真实后端联调跑通预约全流程；生产镜像 `VITE_USE_MOCK=false` |
 | K8s 部署文件 | 已完成 | `k8s/01–09` yaml 齐，端口口径 8080→8080 |
 | 镜像产物 | 已就位 | `g12-web:v1`、`g12-api:v1`、`g12-api:v2` 的 tar 在仓库根目录（`.gitignore` 已排除 `*.tar`，不进 Git） |
-| K8s 现场演练与证据 | 待 C | minikube 全栈部署、v1→v2 发布/回滚、异常发布、扩缩容、HPA 压测、故障复盘的真实输出与截图回填 `evidence/03–07` |
-| 演示材料 | 待 A | PPT、5 分钟演示视频 |
+| K8s 现场演练与证据 | 已完成 | k3s 单节点全栈部署、v1→v2 发布/回滚、异常发布、手动扩缩容、HPA 压测、F2 故障复盘的真实输出与截图已回填 `evidence/03–07` |
+| 演示材料 | 已完成 | 答辩 PPT 定稿见 `docs/G12-A-答辩PPT.pptx`（同名 PDF）；现场演示与可选录屏分镜见 `docs/demo-script.md`。按课程纪要，录屏非强制项 |
 
 ## 本地启动（Docker Compose）
 
@@ -49,16 +49,15 @@ curl http://127.0.0.1:8080/api/actuator/health    # 后端健康检查：{"statu
 - 后端、MySQL 仅在 Compose 内部网络可达，不对外暴露。
 - 演示账号见 `database/seed.sql`，密码统一 `123456`：`admin`（管理员）、`auditor01`（审核员）、`emp01`（员工）。
 
-## K8s 部署（minikube）
+## K8s 部署（k3s 兜底，命令兼容 minikube）
 
 完整步骤见 `docs/runbook.md`（装环境 → 起集群与 addon → Secret/灌 SQL → 加载镜像 → 部署业务层 → 浏览器访问）。关键命令：
 
 ```bash
-# 加载镜像（tar 在仓库根目录）
+# 加载镜像（tar 在仓库根目录）；k3s 内置 containerd，经 k8s.io 命名空间导入
 docker load -i g12-api-v1.tar
 docker load -i g12-web-v1.tar
-minikube image load g12-api:v1
-minikube image load g12-web:v1
+sudo ctr -n k8s.io images import g12-bundle.tar   # k3s containerd；minikube 改用 minikube image load
 
 # 按底座 → 后端/HPA → 前端/Ingress 顺序 apply
 kubectl apply -f k8s/01-namespace.yaml
