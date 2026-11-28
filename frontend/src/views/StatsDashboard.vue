@@ -106,9 +106,22 @@ import { useUserStore } from '@/stores/user'
 import { ROLES } from '@/constants'
 import { formatMinutes } from '@/utils/date'
 
+/**
+ * 数据统计页（模块三 · 门岗统计）
+ *
+ * 后端接口（StatsController）：
+ *   GET /api/stats/overview         总览卡片：今日预约 / 待审核 / 今日到访 / 本月到访 / 平均停留
+ *   GET /api/stats/trend?days=N     近 N 天预约与到访趋势（N = 7 / 14 / 30）
+ *   GET /api/stats/department       部门统计明细（仅 ADMIN，审核员调用返回 403）
+ *
+ * 口径（答辩重点）：
+ *   审核员（AUDITOR）看到的是「本部门」数据，后端按 JWT 里的 dept_id 自动追加过滤；
+ *   管理员（ADMIN）看到的是全局数据与部门分布图。前端只负责展示，不在前端算口径。
+ */
 const router = useRouter()
 const store = useUserStore()
 
+// 管理员才展示「部门分布」与「部门统计明细」两块，审核员只给本部门口径提示
 const isAdmin = computed(() => store.role === ROLES.ADMIN)
 const scopeLabel = computed(() => (isAdmin.value ? '全局口径' : `${store.department}口径`))
 
@@ -124,6 +137,7 @@ const overview = reactive({
 const trend = ref([])
 const departmentStats = ref([])
 
+// 五张总览卡片：数值全部来自 /stats/overview，脚注写清各自的统计口径
 const cards = computed(() => [
   {
     label: '今日预约',
@@ -175,21 +189,25 @@ const deptChartData = computed(() =>
   }))
 )
 
+// 到访转化率 = 到访数 / 预约数，分母为 0 时返回 0，避免出现 NaN%
 function rateOf(row) {
   if (!row.applyCount) return 0
   return Math.round((row.checkinCount / row.applyCount) * 100)
 }
 
+// 总览卡片数据（管理员与审核员共用同一接口，口径由后端按角色决定）
 async function loadOverview() {
   const data = await statsApi.overview()
   Object.assign(overview, data)
 }
 
+// 趋势图：切换 7/14/30 天时重新拉取；纵轴两组序列分别是预约数与到访数
 async function loadTrend() {
   const data = await statsApi.trend(days.value)
   trend.value = data || []
 }
 
+// 部门明细：仅管理员调用，审核员直接跳过（接口本身也会 403）
 async function loadDepartments() {
   if (!isAdmin.value) return
   departmentStats.value = (await statsApi.department()) || []

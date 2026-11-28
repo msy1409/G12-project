@@ -186,6 +186,21 @@ import { useUserStore } from '@/stores/user'
 import { GATE_OPTIONS, ROLES } from '@/constants'
 import { formatMinutes } from '@/utils/date'
 
+/**
+ * 门岗核验页（模块三 · 门岗）
+ *
+ * 业务流（状态机，答辩会问）：
+ *   预约审核通过 → status=2「待到访」
+ *   门岗输入 6 位核验码入场 → status=3「已到访」，同时写入到访记录
+ *   按预约单 ID 登记离场 → status=4「已离开」，系统自动算停留时长
+ *
+ * 后端接口（RecordController）：
+ *   POST /api/records/checkin   { verifyCode, gate }  核验入场
+ *   POST /api/records/checkout  { applyId, gate }     登记离场
+ *   GET  /api/records          分页查看到访记录（日期/关键字/部门过滤）
+ *
+ * 权限：管理员可核验全部访客；审核员仅限本部门（后端校验，越权返回 403）。
+ */
 const route = useRoute()
 const store = useUserStore()
 const isAdmin = computed(() => store.role === ROLES.ADMIN)
@@ -220,14 +235,17 @@ const columns = [
   { prop: 'status', label: '状态', width: 105, slot: 'status' }
 ]
 
+// 核验码只允许 6 位数字，输入时实时过滤掉非数字字符
 function onlyDigits(value) {
   checkinForm.verifyCode = String(value || '').replace(/\D/g, '').slice(0, 6)
 }
 
+// 预约单 ID 只允许数字
 function onlyNumber(value) {
   checkoutForm.applyId = String(value || '').replace(/\D/g, '')
 }
 
+// 入场：前端先做 6 位格式校验，真正的状态/部门校验由后端做（返回 4xx 由拦截器提示）
 async function doCheckin() {
   if (checkinLoading.value) return
   const code = checkinForm.verifyCode.trim()
@@ -241,12 +259,14 @@ async function doCheckin() {
     checkinResult.value = data
     checkinForm.verifyCode = ''
     ElMessage.success(`${data.visitorName} 入场登记成功`)
+    // 入场后同时刷新到访记录列表和「当前在场」快捷列表
     await Promise.all([loadRecords(), loadQuickLists()])
   } finally {
     checkinLoading.value = false
   }
 }
 
+// 离场：只有 status=3 且存在未离场记录的预约单才能登记，停留时长由后端按时间戳相减得出
 async function doCheckout() {
   if (checkoutLoading.value) return
   const applyId = Number(checkoutForm.applyId)
