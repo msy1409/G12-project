@@ -168,9 +168,9 @@ FROM apply_process_record WHERE apply_id = <预约 id> ORDER BY id;
 
 | 场景 | 页面操作 | 状态变化 | 证据 |
 |---|---|---|---|
-| 驳回 | 审核列表点「驳回」，必填原因 | 0 → 9（REJECT） | 待补 |
-| 员工取消 | 我的预约点「取消」 | 0/1/2 → 9（CANCEL） | 待补 |
-| 越权审核 | 用别的部门审核员打开详情 | HTTP 403 | 待补 |
-| 非法流转 | 已离场再入场 | HTTP 400 `STATE_NOT_ALLOWED` | 待补 |
+| 驳回 | 审核列表点「驳回」，必填原因 | 0 → 9（REJECT） | `evidence/business-flow/01-reject.md`：auditor01 驳回单15 返回 HTTP 200，DB 复核 `status=9`；raw `_raw/business-flow/01-reject.txt` |
+| 员工取消 | 我的预约点「取消」 | 0/1/2 → 9（CANCEL） | `evidence/business-flow/02-cancel.md`：emp01 取消单16 返回 HTTP 200，DB 复核 `status=9`；raw `_raw/business-flow/02-cancel.txt` |
+| 越权审核 | 用别的部门审核员打开详情 | HTTP 403 | `evidence/business-flow/03-dept-scope-403.md`：auditor02（市场部）跨部门读/审销售部单13 均返回 `403 DEPT_SCOPE_DENIED`；raw `_raw/business-flow/03-dept-scope-403.txt` |
+| 非法流转 | 已离场/在场单取消或重复离场 | HTTP 400 `STATE_NOT_ALLOWED` | `evidence/business-flow/04-illegal-state-400.md`：单1(status4)取消、单5(status3)取消、单1重复离场均返回 `400 STATE_NOT_ALLOWED`，状态未改；raw `_raw/business-flow/04-illegal-state-400.txt` |
 
 > 截图统一放 `evidence/business-flow/`，文件名与上文一致；补图后在每张图旁标注采集时间和登录角色。

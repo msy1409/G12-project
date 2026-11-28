@@ -1,0 +1,32 @@
+# 采集时间：2026-11-28 17:40:49  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：kubectl get events -n enterprise-g12 --sort-by=.lastTimestamp | tail -25
+# ------------------------------------------------------------
+8m48s       Normal    Created                        pod/g12-backend-7585dd6b86-pj429          Created container backend
+8m20s       Warning   Unhealthy                      pod/g12-backend-7585dd6b86-pj429          Startup probe failed: Get "http://10.42.0.173:8080/api/actuator/health": dial tcp 10.42.0.173:8080: connect: connection refused
+8m8s        Warning   Unhealthy                      pod/g12-backend-7585dd6b86-pj429          Startup probe failed: Get "http://10.42.0.173:8080/api/actuator/health": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+7m39s       Normal    Killing                        pod/g12-backend-5fc9b977d7-vplx6          Stopping container backend
+7m39s       Normal    ScalingReplicaSet              deployment/g12-backend                    Scaled up replica set g12-backend-7585dd6b86 to 2 from 1
+7m39s       Normal    SuccessfulDelete               replicaset/g12-backend-5fc9b977d7         Deleted pod: g12-backend-5fc9b977d7-vplx6
+7m39s       Normal    SuccessfulCreate               replicaset/g12-backend-7585dd6b86         Created pod: g12-backend-7585dd6b86-9kzqb
+7m39s       Normal    ScalingReplicaSet              deployment/g12-backend                    Scaled down replica set g12-backend-5fc9b977d7 to 1 from 2
+7m37s       Normal    Pulled                         pod/g12-backend-7585dd6b86-9kzqb          Container image "g12-api:v2" already present on machine
+7m37s       Normal    Created                        pod/g12-backend-7585dd6b86-9kzqb          Created container backend
+7m36s       Normal    Started                        pod/g12-backend-7585dd6b86-9kzqb          Started container backend
+6m48s       Warning   Unhealthy                      pod/g12-backend-7585dd6b86-9kzqb          Startup probe failed: Get "http://10.42.0.174:8080/api/actuator/health": dial tcp 10.42.0.174:8080: connect: connection refused
+6m37s       Warning   Unhealthy                      pod/g12-backend-7585dd6b86-9kzqb          Startup probe failed: Get "http://10.42.0.174:8080/api/actuator/health": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+6m28s       Normal    Killing                        pod/g12-backend-5fc9b977d7-q9qbh          Stopping container backend
+6m28s       Normal    SuccessfulDelete               replicaset/g12-backend-5fc9b977d7         Deleted pod: g12-backend-5fc9b977d7-q9qbh
+6m28s       Normal    ScalingReplicaSet              deployment/g12-backend                    Scaled down replica set g12-backend-5fc9b977d7 to 0 from 1
+5m30s       Normal    ScalingReplicaSet              deployment/g12-backend                    Scaled up replica set g12-backend-775c8875b5 to 1
+5m30s       Normal    SuccessfulCreate               replicaset/g12-backend-775c8875b5         Created pod: g12-backend-775c8875b5-4kbwm
+4m          Normal    BackOff                        pod/g12-backend-775c8875b5-4kbwm          Back-off pulling image "g12-api:v999"
+4m          Warning   Failed                         pod/g12-backend-775c8875b5-4kbwm          Error: ImagePullBackOff
+3m47s       Normal    Pulling                        pod/g12-backend-775c8875b5-4kbwm          Pulling image "g12-api:v999"
+3m38s       Normal    ScalingReplicaSet              deployment/g12-backend                    (combined from similar events): Scaled down replica set g12-backend-775c8875b5 to 0 from 1
+3m38s       Normal    SuccessfulDelete               replicaset/g12-backend-775c8875b5         Deleted pod: g12-backend-775c8875b5-4kbwm
+3m21s       Warning   Failed                         pod/g12-backend-775c8875b5-4kbwm          Failed to pull image "g12-api:v999": failed to pull and unpack image "docker.io/library/g12-api:v999": failed to resolve reference "docker.io/library/g12-api:v999": unexpected status from HEAD request to https://docker.m.daocloud.io/v2/library/g12-api/manifests/v999?ns=docker.io: 403 Forbidden
+3m21s       Warning   Failed                         pod/g12-backend-775c8875b5-4kbwm          Error: ErrImagePull
+STDERR: [sudo] s 的密码：
+# ------------------------------------------------------------
+# 退出码：0

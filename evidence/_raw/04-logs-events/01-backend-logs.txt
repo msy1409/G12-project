@@ -1,0 +1,62 @@
+# 采集时间：2026-11-28 17:18:15  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：echo 12 | sudo -S env KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl logs -l app=g12-backend -n enterprise-g12 --timestamps --tail=40
+# ------------------------------------------------------------
+2026-11-28T16:43:45.474582945+08:00 
+2026-11-28T16:43:45.474658255+08:00   .   ____          _            __ _ _
+2026-11-28T16:43:45.474661486+08:00  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+2026-11-28T16:43:45.474663173+08:00 ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+2026-11-28T16:43:45.474664133+08:00  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+2026-11-28T16:43:45.474665129+08:00   '  |____| .__|_| |_|_| |_\__, | / / / /
+2026-11-28T16:43:45.474670797+08:00  =========|_|==============|___/=/_/_/_/
+2026-11-28T16:43:45.474671660+08:00 
+2026-11-28T16:43:45.475402200+08:00  :: Spring Boot ::               (v3.5.16)
+2026-11-28T16:43:45.475407792+08:00 
+2026-11-28T16:43:45.738132487+08:00 2026-11-28T08:43:45.734Z  INFO 1 --- [g12-backend] [           main] com.g12.visitor.VisitorApplication       : Starting VisitorApplication v1.0.0 using Java 21.0.13 with PID 1 (/app/app.jar started by root in /app)
+2026-11-28T16:43:45.739901385+08:00 2026-11-28T08:43:45.739Z  INFO 1 --- [g12-backend] [           main] com.g12.visitor.VisitorApplication       : No active profile set, falling back to 1 default profile: "default"
+2026-11-28T16:43:51.163868128+08:00 2026-11-28T08:43:51.162Z  INFO 1 --- [g12-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-11-28T16:43:51.186947608+08:00 2026-11-28T08:43:51.186Z  INFO 1 --- [g12-backend] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-11-28T16:43:51.187482557+08:00 2026-11-28T08:43:51.187Z  INFO 1 --- [g12-backend] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.55]
+2026-11-28T16:43:51.454847985+08:00 2026-11-28T08:43:51.451Z  INFO 1 --- [g12-backend] [           main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2026-11-28T16:43:51.463957563+08:00 2026-11-28T08:43:51.458Z  INFO 1 --- [g12-backend] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5589 ms
+2026-11-28T16:44:00.832181328+08:00 2026-11-28T08:44:00.774Z  INFO 1 --- [g12-backend] [           main] b.m.s.MybatisPlusApplicationContextAware : Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@fade1fc
+2026-11-28T16:44:01.446797955+08:00 2026-11-28T08:44:01.445Z  INFO 1 --- [g12-backend] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoints beneath base path '/actuator'
+2026-11-28T16:44:02.639832580+08:00 2026-11-28T08:44:02.639Z  INFO 1 --- [g12-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/api'
+2026-11-28T16:44:02.660403832+08:00 2026-11-28T08:44:02.658Z  INFO 1 --- [g12-backend] [           main] com.g12.visitor.VisitorApplication       : Started VisitorApplication in 18.801 seconds (process running for 20.891)
+2026-11-28T16:44:11.258729810+08:00 2026-11-28T08:44:11.257Z  INFO 1 --- [g12-backend] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-28T16:44:11.259276298+08:00 2026-11-28T08:44:11.258Z  INFO 1 --- [g12-backend] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-11-28T16:44:11.261870471+08:00 2026-11-28T08:44:11.260Z  INFO 1 --- [g12-backend] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-11-28T16:44:11.472770806+08:00 2026-11-28T08:44:11.461Z  INFO 1 --- [g12-backend] [nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-11-28T16:44:12.334468897+08:00 2026-11-28T08:44:12.333Z  INFO 1 --- [g12-backend] [nio-8080-exec-1] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5c574b5a
+2026-11-28T16:44:12.341677095+08:00 2026-11-28T08:44:12.341Z  INFO 1 --- [g12-backend] [nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-11-28T16:45:34.826048870+08:00 
+2026-11-28T16:45:34.826185427+08:00   .   ____          _            __ _ _
+2026-11-28T16:45:34.826189332+08:00  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+2026-11-28T16:45:34.826190445+08:00 ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+2026-11-28T16:45:34.826191484+08:00  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+2026-11-28T16:45:34.826192405+08:00   '  |____| .__|_| |_|_| |_\__, | / / / /
+2026-11-28T16:45:34.826193678+08:00  =========|_|==============|___/=/_/_/_/
+2026-11-28T16:45:34.826194588+08:00 
+2026-11-28T16:45:34.826466470+08:00  :: Spring Boot ::               (v3.5.16)
+2026-11-28T16:45:34.826481773+08:00 
+2026-11-28T16:45:35.007527111+08:00 2026-11-28T08:45:35.004Z  INFO 1 --- [g12-backend] [           main] com.g12.visitor.VisitorApplication       : Starting VisitorApplication v1.0.0 using Java 21.0.13 with PID 1 (/app/app.jar started by root in /app)
+2026-11-28T16:45:35.010951574+08:00 2026-11-28T08:45:35.008Z  INFO 1 --- [g12-backend] [           main] com.g12.visitor.VisitorApplication       : No active profile set, falling back to 1 default profile: "default"
+2026-11-28T16:45:40.593889730+08:00 2026-11-28T08:45:40.592Z  INFO 1 --- [g12-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-11-28T16:45:40.633740861+08:00 2026-11-28T08:45:40.632Z  INFO 1 --- [g12-backend] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-11-28T16:45:40.635376539+08:00 2026-11-28T08:45:40.633Z  INFO 1 --- [g12-backend] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.55]
+2026-11-28T16:45:41.011048667+08:00 2026-11-28T08:45:41.010Z  INFO 1 --- [g12-backend] [           main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2026-11-28T16:45:41.012931217+08:00 2026-11-28T08:45:41.012Z  INFO 1 --- [g12-backend] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5817 ms
+2026-11-28T16:45:47.215054180+08:00 2026-11-28T08:45:47.199Z  INFO 1 --- [g12-backend] [           main] b.m.s.MybatisPlusApplicationContextAware : Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@fade1fc
+2026-11-28T16:45:48.694014108+08:00 2026-11-28T08:45:48.693Z  INFO 1 --- [g12-backend] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoints beneath base path '/actuator'
+2026-11-28T16:45:48.841587584+08:00 2026-11-28T08:45:48.841Z  INFO 1 --- [g12-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/api'
+2026-11-28T16:45:48.920217719+08:00 2026-11-28T08:45:48.907Z  INFO 1 --- [g12-backend] [           main] com.g12.visitor.VisitorApplication       : Started VisitorApplication in 15.387 seconds (process running for 16.78)
+2026-11-28T16:45:51.914142126+08:00 2026-11-28T08:45:51.913Z  INFO 1 --- [g12-backend] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-28T16:45:51.916511890+08:00 2026-11-28T08:45:51.916Z  INFO 1 --- [g12-backend] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-11-28T16:45:51.919727457+08:00 2026-11-28T08:45:51.919Z  INFO 1 --- [g12-backend] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-11-28T16:45:52.034369090+08:00 2026-11-28T08:45:52.033Z  INFO 1 --- [g12-backend] [nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-11-28T16:45:52.514481470+08:00 2026-11-28T08:45:52.513Z  INFO 1 --- [g12-backend] [nio-8080-exec-1] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5c574b5a
+2026-11-28T16:45:52.523631006+08:00 2026-11-28T08:45:52.523Z  INFO 1 --- [g12-backend] [nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+# stderr:
+[sudo] s 的密码：
+# ------------------------------------------------------------
+# 退出码：0

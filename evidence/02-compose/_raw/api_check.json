@@ -1,0 +1,26 @@
+{
+  "login": {
+    "admin": "OK",
+    "auditor01": "OK",
+    "emp01": "OK"
+  },
+  "api": {
+    "admin": {
+      "/api/applies": "200",
+      "/api/users": "200",
+      "/api/departments": "200",
+      "/api/records": "200",
+      "/api/auth/me": "200"
+    },
+    "auditor01": {
+      "/api/applies/pending": "200",
+      "/api/stats/overview": "200",
+      "/api/stats/trend?days=7": "200",
+      "/api/stats/department": "200"
+    },
+    "emp01": {
+      "/api/applies/mine": "200"
+    }
+  },
+  "note": "首次采集 admin 三项偶发 000，复核重打均 200；三角色登录 OK。"
+}

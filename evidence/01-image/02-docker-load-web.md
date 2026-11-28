@@ -5,8 +5,8 @@
 | 图片 | `02-docker-load-web.png` |
 | 所属目录 | `evidence/01-image/` |
 | 采集人 | C |
-| 采集时间 | 【填：YYYY-MM-DD HH:MM（Asia/Shanghai）】 |
-| 环境 | minikube / namespace `enterprise-g12` |
+| 采集时间 | 2026-11-28 13:50（Asia/Shanghai） |
+| 环境 | k3s v1.28.2+k3s1 单节点（兜底复刻） / namespace `enterprise-g12` |
 | 关联文档 | `docs/runbook.md §6` |
 
 ## 对应命令
@@ -22,11 +22,13 @@ docker images | grep g12
 
 ## 实际输出（截取）
 
-【贴：与图一致的文本输出；长输出只留首行 + 结论行，中间用 ... 省略】
+```text
+受限说明：g12-web:v1 的 tar 由 A 侧构建导出，load 过程未单独留存截图；节点 containerd 内 g12-web:v1 的存在性见 03-minikube-image-ls.md 清单（IMAGE ID 6dbbc9b1ef8c7，tag v1，非 latest）。
+```
 
 ## 观察结论
 
-【填：一句话结论，写“什么现象 + 说明什么”，不要写“运行成功”这种空话】
+前端镜像 g12-web:v1 已在节点 containerd 可见、tag 非 latest；load 过程截图缺，镜像存在性由 03 清单佐证。
 
 ## 备注
 

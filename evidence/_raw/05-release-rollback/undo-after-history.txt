@@ -1,0 +1,17 @@
+# 采集时间：2026-11-28 17:37:54  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：kubectl rollout history deployment/g12-backend -n enterprise-g12
+# ------------------------------------------------------------
+deployment.apps/g12-backend 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+3         <none>
+5         <none>
+6         <none>
+8         <none>
+10        <none>
+11        <none>
+STDERR: [sudo] s 的密码：
+# ------------------------------------------------------------
+# 退出码：0

@@ -1,0 +1,75 @@
+# 采集时间：2026-11-28 17:36:45  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：kubectl describe pod g12-backend-775c8875b5-4kbwm -n enterprise-g12
+# ------------------------------------------------------------
+Name:             g12-backend-775c8875b5-4kbwm
+Namespace:        enterprise-g12
+Priority:         0
+Service Account:  default
+Node:             s/10.0.2.15
+Start Time:       Sat, 28 Nov 2026 17:35:19 +0800
+Labels:           app=g12-backend
+                  pod-template-hash=775c8875b5
+                  tier=backend
+Annotations:      <none>
+Status:           Pending
+IP:               10.42.0.175
+IPs:
+  IP:           10.42.0.175
+Controlled By:  ReplicaSet/g12-backend-775c8875b5
+Containers:
+  backend:
+    Container ID:   
+    Image:          g12-api:v999
+    Image ID:       
+    Port:           8080/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     1
+      memory:  1Gi
+    Requests:
+      cpu:      200m
+      memory:   512Mi
+    Readiness:  http-get http://:8080/api/actuator/health delay=60s timeout=3s period=10s #success=1 #failure=10
+    Startup:    http-get http://:8080/api/actuator/health delay=0s timeout=1s period=10s #success=1 #failure=24
+    Environment Variables from:
+      g12-config  ConfigMap  Optional: false
+    Environment:
+      SERVER_PORT:  8080
+      DB_PASSWORD:  <set to the key 'DB_PASSWORD' in secret 'g12-secret'>  Optional: false
+      JWT_SECRET:   <set to the key 'JWT_SECRET' in secret 'g12-secret'>   Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-wrcs6 (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             False 
+  ContainersReady   False 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-wrcs6:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  85s                default-scheduler  Successfully assigned enterprise-g12/g12-backend-775c8875b5-4kbwm to s
+  Normal   BackOff    59s                kubelet            Back-off pulling image "g12-api:v999"
+  Warning  Failed     59s                kubelet            Error: ImagePullBackOff
+  Normal   Pulling    44s (x2 over 84s)  kubelet            Pulling image "g12-api:v999"
+  Warning  Failed     10s (x2 over 59s)  kubelet            Failed to pull image "g12-api:v999": failed to pull and unpack image "docker.io/library/g12-api:v999": failed to resolve reference "docker.io/library/g12-api:v999": unexpected status from HEAD request to https://docker.m.daocloud.io/v2/library/g12-api/manifests/v999?ns=docker.io: 403 Forbidden
+  Warning  Failed     10s (x2 over 59s)  kubelet            Error: ErrImagePull
+STDERR: [sudo] s 的密码：
+# ------------------------------------------------------------
+# 退出码：0

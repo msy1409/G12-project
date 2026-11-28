@@ -1,0 +1,15 @@
+health: {"status":"UP"}
+
+apply_process_record	0
+biz_status_change_log	0
+sys_department	10
+sys_user	12
+visitor_apply	15
+visitor_record	10
+
+visitor_apply: 15
+visitor_record: 10
+sys_user: 12
+sys_department: 10
+apply_process_record: 53
+biz_status_change_log: 53

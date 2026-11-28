@@ -1,0 +1,15 @@
+# 采集时间：2026-11-28 17:01:38  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：echo 12 | sudo -S env KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl get hpa -n enterprise-g12; echo 12 | sudo -S env KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl top pod -n enterprise-g12 -l app=g12-backend
+# ------------------------------------------------------------
+NAME              REFERENCE                TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+g12-backend-hpa   Deployment/g12-backend   81%/60%   2         4         3          16m
+
+---
+NAME                           CPU(cores)   MEMORY(bytes)   
+g12-backend-7585dd6b86-mspgg   165m         228Mi           
+g12-backend-7585dd6b86-xwzk4   161m         230Mi
+# stderr:
+[sudo] s 的密码：
+# ------------------------------------------------------------
+# 退出码：0

@@ -1,0 +1,41 @@
+# 采集时间：2026-11-28 18:00  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：kubectl get pods,svc,endpoints,ingress,hpa -n enterprise-g12 -o wide; echo '--- metrics-server ---'; kubectl get pods -n kube-system -l k8s-app=metrics-server; echo '--- top node ---'; kubectl top node; echo '--- top pod ---'; kubectl top pod -n enterprise-g12
+# ------------------------------------------------------------
+NAME                                READY   STATUS    RESTARTS       AGE     IP            NODE
+pod/g12-mysql-5cb9987d-t4h5v        1/1     Running   6 (169m ago)   5h39m   10.42.0.151   s
+pod/g12-frontend-74c48b9d66-vhmb4   1/1     Running   8 (169m ago)   4h48m   10.42.0.146   s
+pod/g12-frontend-74c48b9d66-tznxw   1/1     Running   8 (169m ago)   4h48m   10.42.0.147   s
+pod/g12-backend-7585dd6b86-pj429    1/1     Running   0              28m     10.42.0.173   s
+pod/g12-backend-7585dd6b86-9kzqb    1/1     Running   0              27m     10.42.0.174   s
+
+NAME                   TYPE        CLUSTER-IP      PORT(S)    AGE     SELECTOR
+service/g12-mysql      ClusterIP   10.43.95.160    3306/TCP   17h     app=g12-mysql
+service/g12-frontend   ClusterIP   10.43.6.182     80/TCP     4h48m   app=g12-frontend
+service/g12-backend    ClusterIP   10.43.180.101   8080/TCP   5h29m   app=g12-backend
+
+NAME                     ENDPOINTS                           AGE
+endpoints/g12-mysql      10.42.0.151:3306                    17h
+endpoints/g12-frontend   10.42.0.146:80,10.42.0.147:80       4h48m
+endpoints/g12-backend    10.42.0.173:8080,10.42.0.174:8080   5h29m
+
+NAME                                    CLASS   HOSTS              ADDRESS     PORTS   AGE
+ingress.networking.k8s.io/g12-ingress   nginx   g12.course.local   10.0.2.15   80      4h25m
+
+NAME                                                  REFERENCE                TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/g12-backend-hpa   Deployment/g12-backend   4%/60%    2         4         2          46m
+--- metrics-server ---
+NAME                             READY   STATUS    RESTARTS   AGE
+metrics-server-87dcdc995-g5ht9   1/1     Running   0          95m
+--- top node ---
+NAME   CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+s      529m         17%    5297Mi          66%
+--- top pod ---
+NAME                            CPU(cores)   MEMORY(bytes)
+g12-backend-7585dd6b86-9kzqb    8m           195Mi
+g12-backend-7585dd6b86-pj429    7m           186Mi
+g12-frontend-74c48b9d66-tznxw   1m           3Mi
+g12-frontend-74c48b9d66-vhmb4   1m           3Mi
+g12-mysql-5cb9987d-t4h5v        40m          465Mi
+# ------------------------------------------------------------
+# 退出码：0

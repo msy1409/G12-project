@@ -4,9 +4,9 @@
 |---|---|
 | 图片 | `02-load-v2.png` |
 | 所属目录 | `evidence/05-release-rollback/` |
-| 采集人 | C |
-| 采集时间 | 【填：YYYY-MM-DD HH:MM（Asia/Shanghai）】 |
-| 环境 | minikube / namespace `enterprise-g12` |
+| 采集人 | B（k3s 兜底环境代采） |
+| 采集时间 | 2026-11-28 17:31（Asia/Shanghai） |
+| 环境 | k3s v1.28.2+k3s1 单节点 / namespace `enterprise-g12` |
 | 关联文档 | `docs/operation-record.md OP-01` |
 
 ## 对应命令
@@ -24,11 +24,17 @@ minikube image ls | grep g12-api
 
 ## 实际输出（截取）
 
-【贴：与图一致的文本输出；长输出只留首行 + 结论行，中间用 ... 省略】
+### 02-load-v2-images
+
+```
+docker.io/library/g12-api                       v1                     62ff14af849a7       145MB
+docker.io/library/g12-api                       v2                     9a58ef602f2d2       145MB
+docker.io/library/g12-web                       v1                     6dbbc9b1ef8c7       51.3MB
+```
 
 ## 观察结论
 
-【填：一句话结论，写“什么现象 + 说明什么”，不要写“运行成功”这种空话】
+g12-api:v2 镜像已导入 k3s 节点 containerd 并在 CRI 索引可见，可被新 Pod 本地拉取。
 
 ## 备注
 

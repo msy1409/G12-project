@@ -1,0 +1,26 @@
+# 采集时间：2026-11-28 17:56  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：kubectl get pvc -n enterprise-g12; echo --- pv ---; kubectl get pv; echo --- describe ---; kubectl describe pvc g12-mysql-pvc -n enterprise-g12 | tail -15
+# ------------------------------------------------------------
+NAME            STATUS   VOLUME         CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+g12-mysql-pvc   Bound    g12-mysql-pv   5Gi        RWO            g12-local      17h
+--- pv ---
+NAME           CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                          STORAGECLASS   REASON   AGE
+mysql-pv       2Gi        RWO            Retain           Bound    book/mysql-pvc                 manual                  23d
+g12-mysql-pv   5Gi        RWO            Retain           Bound    enterprise-g12/g12-mysql-pvc   g12-local               17h
+--- describe ---
+Name:          g12-mysql-pvc
+Namespace:     enterprise-g12
+StorageClass:  g12-local
+Status:        Bound
+Volume:        g12-mysql-pv
+Labels:        app=g12-mysql
+Annotations:   pv.kubernetes.io/bind-completed: yes
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:      5Gi
+Access Modes:  RWO
+VolumeMode:    Filesystem
+Used By:       g12-mysql-5cb9987d-t4h5v
+Events:        <none>
+# ------------------------------------------------------------
+# 退出码：0

@@ -1,0 +1,46 @@
+# 采集时间：2026-11-28 16:58:05  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：echo 12 | sudo -S env KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl describe hpa g12-backend-hpa -n enterprise-g12
+# ------------------------------------------------------------
+Name:                                                  g12-backend-hpa
+Namespace:                                             enterprise-g12
+Labels:                                                app=g12-backend
+Annotations:                                           <none>
+CreationTimestamp:                                     Sat, 28 Nov 2026 16:45:16 +0800
+Reference:                                             Deployment/g12-backend
+Metrics:                                               ( current / target )
+  resource cpu on pods  (as a percentage of request):  2% (4m) / 60%
+Min replicas:                                          2
+Max replicas:                                          4
+Behavior:
+  Scale Up:
+    Stabilization Window: 60 seconds
+    Select Policy: Max
+    Policies:
+      - Type: Pods  Value: 1  Period: 30 seconds
+  Scale Down:
+    Stabilization Window: 60 seconds
+    Select Policy: Max
+    Policies:
+      - Type: Pods  Value: 1  Period: 60 seconds
+Deployment pods:    2 current / 2 desired
+Conditions:
+  Type            Status  Reason            Message
+  ----            ------  ------            -------
+  AbleToScale     True    ReadyForNewScale  recommended size matches current size
+  ScalingActive   True    ValidMetricFound  the HPA was able to successfully calculate a replica count from cpu resource utilization (percentage of request)
+  ScalingLimited  True    TooFewReplicas    the desired replica count is less than the minimum replica count
+Events:
+  Type     Reason                        Age                From                       Message
+  ----     ------                        ----               ----                       -------
+  Normal   SuccessfulRescale             12m                horizontal-pod-autoscaler  New size: 2; reason: Current number of replicas below Spec.MinReplicas
+  Warning  FailedGetResourceMetric       12m (x3 over 12m)  horizontal-pod-autoscaler  failed to get cpu utilization: did not receive metrics for targeted pods (pods might be unready)
+  Warning  FailedComputeMetricsReplicas  12m (x3 over 12m)  horizontal-pod-autoscaler  invalid metrics (1 invalid out of 1), first error is: failed to get cpu resource metric value: failed to get cpu utilization: did not receive metrics for targeted pods (pods might be unready)
+  Normal   SuccessfulRescale             8m13s              horizontal-pod-autoscaler  New size: 3; reason: cpu resource utilization (percentage of request) above target
+  Normal   SuccessfulRescale             7m43s              horizontal-pod-autoscaler  New size: 4; reason: cpu resource utilization (percentage of request) above target
+  Normal   SuccessfulRescale             5m13s              horizontal-pod-autoscaler  New size: 3; reason: All metrics below target
+  Normal   SuccessfulRescale             4m13s              horizontal-pod-autoscaler  New size: 2; reason: All metrics below target
+# stderr:
+[sudo] s 的密码：
+# ------------------------------------------------------------
+# 退出码：0

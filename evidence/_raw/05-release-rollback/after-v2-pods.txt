@@ -1,0 +1,10 @@
+# 采集时间：2026-11-28 17:34:54  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：kubectl get pods -n enterprise-g12 -l app=g12-backend -o wide --show-labels
+# ------------------------------------------------------------
+NAME                           READY   STATUS    RESTARTS   AGE     IP            NODE   NOMINATED NODE   READINESS GATES   LABELS
+g12-backend-7585dd6b86-pj429   1/1     Running   0          2m55s   10.42.0.173   s      <none>           <none>            app=g12-backend,pod-template-hash=7585dd6b86,tier=backend
+g12-backend-7585dd6b86-9kzqb   1/1     Running   0          104s    10.42.0.174   s      <none>           <none>            app=g12-backend,pod-template-hash=7585dd6b86,tier=backend
+STDERR: [sudo] s 的密码：
+# ------------------------------------------------------------
+# 退出码：0

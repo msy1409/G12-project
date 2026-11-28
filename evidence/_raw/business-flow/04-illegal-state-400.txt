@@ -1,0 +1,15 @@
+# 采集时间：2026-11-28 18:09:34  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：cancel/checkout 已完结单 (admin)
+# ------------------------------------------------------------
+# 场景：对已完结/已在场的单做不允许的状态流转
+# 角色：admin（绕过归属校验，直接触发状态机校验）
+# 命令(取消已离场单1, status=4)：echo eyJyZWFzb24iOiAiXHU5NzVlXHU2Y2Q1XHU2ZDQxXHU4ZjZjXHU2M2EyXHU2ZDRiIn0= | base64 -d > /tmp/b.json; curl -s -o /tmp/resp.txt -w '%{http_code}' -X PUT http://127.0.0.1/api/applies/1/cancel -H 'Host: g12.course.local' -H 'Authorization: Bearer eyJ…(脱敏)' -H 'Content-Type: application/json' -d @/tmp/b.json; echo; cat /tmp/resp.txt
+# 响应：HTTP 400  {"code": 400, "message": "STATE_NOT_ALLOWED", "data": null}
+# 命令(取消在场单5, status=3)：echo eyJyZWFzb24iOiAiXHU5NzVlXHU2Y2Q1XHU2ZDQxXHU4ZjZjXHU2M2EyXHU2ZDRiIn0= | base64 -d > /tmp/b.json; curl -s -o /tmp/resp.txt -w '%{http_code}' -X PUT http://127.0.0.1/api/applies/5/cancel -H 'Host: g12.course.local' -H 'Authorization: Bearer eyJ…(脱敏)' -H 'Content-Type: application/json' -d @/tmp/b.json; echo; cat /tmp/resp.txt
+# 响应：HTTP 400  {"code": 400, "message": "STATE_NOT_ALLOWED", "data": null}
+# 命令(已离场单1 重复离场 checkout)：echo eyJhcHBseUlkIjogMSwgImdhdGUiOiAiXHU0ZTFjXHU5NWU4LTAxIn0= | base64 -d > /tmp/b.json; curl -s -o /tmp/resp.txt -w '%{http_code}' -X POST http://127.0.0.1/api/records/checkout -H 'Host: g12.course.local' -H 'Authorization: Bearer eyJ…(脱敏)' -H 'Content-Type: application/json' -d @/tmp/b.json; echo; cat /tmp/resp.txt
+# 响应：HTTP 400  {"code": 400, "message": "STATE_NOT_ALLOWED", "data": null}
+# 说明：三种非法流转均被状态机拦截，返回 400 STATE_NOT_ALLOWED；单1/单5 状态未被改动。
+# ------------------------------------------------------------
+# 退出码：0

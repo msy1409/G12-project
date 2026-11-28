@@ -1,0 +1,22 @@
+# 采集时间：2026-11-28 13:39:49  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：echo 12 | sudo -S /var/lib/rancher/k3s/data/current/bin/crictl --runtime-endpoint unix:///run/k3s/containerd/containerd.sock images 2>&1
+# ------------------------------------------------------------
+[sudo] s 的密码： IMAGE                                           TAG                    IMAGE ID            SIZE
+docker.io/library/book-api                      1.0                    89156d3b4ccee       52.1MB
+docker.io/library/book-api                      2.0                    952997035d78a       47.4MB
+docker.io/library/book-frontend                 1.0                    7450c4734de01       26.3MB
+docker.io/library/g12-api                       v1                     62ff14af849a7       145MB
+docker.io/library/g12-api                       v2                     9a58ef602f2d2       145MB
+docker.io/library/g12-web                       v1                     6dbbc9b1ef8c7       51.3MB
+docker.io/library/mysql                         8.0                    6cd09145362df       234MB
+docker.io/library/nginx                         latest                 1ebe58b0003b2       63.9MB
+docker.io/rancher/klipper-helm                  v0.8.2-build20230815   5f89cb8137ccb       90.9MB
+docker.io/rancher/local-path-provisioner        v0.0.24                b29384aeb4b13       14.9MB
+docker.io/rancher/mirrored-coredns-coredns      1.10.1                 ead0a4a53df89       16.2MB
+docker.io/rancher/mirrored-metrics-server       v0.6.3                 817bbe3f2e517       29.9MB
+docker.io/rancher/mirrored-pause                3.6                    6270bb605e12e       301kB
+registry.k8s.io/ingress-nginx/controller        v1.10.1                ee54966f3891d       104MB
+registry.k8s.io/metrics-server/metrics-server   v0.7.2                 48d9cfaaf3904       19.5MB
+# ------------------------------------------------------------
+# 退出码：0

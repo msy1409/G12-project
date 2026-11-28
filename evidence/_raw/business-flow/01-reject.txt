@@ -1,0 +1,26 @@
+# 采集时间：2026-11-28 18:09:34  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：PUT /api/applies/15/reject (auditor01) + DB 复核
+# ------------------------------------------------------------
+# 场景：审核员驳回待审核预约（0 → 9，REJECT）
+# 角色：emp01 建单（技术研发部 dept4）→ auditor01（技术研发部审核员）驳回
+# 首次实测命令：
+#   POST /api/applies            （emp01，body 含 visitorName/visitorPhone/deptId=4/hostName/visitReason/visitTime/leaveTime）
+#   PUT  /api/applies/15/reject  （auditor01，body {"reason":"异常链路演练-驳回"}）
+# 首次实测响应：
+#   建单 -> {"code":200,"data":{"id":15,"applyNo":"AP20261128000015","status":0}}
+#   驳回 -> HTTP 200  {"code":200,"message":"ok","data":null}
+# 复核（只读）：DB 终态
+# 命令：echo 12 | sudo -S env KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl exec g12-mysql-5cb9987d-t4h5v -n enterprise-g12 -- sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" ctts_g12 -t < /tmp/q.sql'
++----+------------------+---------+--------+-----------+
+| id | apply_no         | dept_id | status | create_by |
++----+------------------+---------+--------+-----------+
+|  1 | AP20261101000001 |       4 |      4 |         5 |
+|  5 | AP20261105000005 |       5 |      3 |         8 |
+| 13 | AP20261109000013 |       6 |      0 |         9 |
+| 15 | AP20261128000015 |       4 |      9 |         5 |
+| 16 | AP20261128000016 |       4 |      9 |         5 |
++----+------------------+---------+--------+-----------+
+# 说明：单15 status=9（已驳回），REJECT 流转落库；处理记录与状态审计由后端写入。
+# ------------------------------------------------------------
+# 退出码：0

@@ -1,0 +1,9 @@
+# 采集时间：2026-11-28 17:36:42  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：kubectl get deploy g12-backend -n enterprise-g12
+# ------------------------------------------------------------
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+g12-backend   2/2     1            2           5h6m
+STDERR: [sudo] s 的密码：
+# ------------------------------------------------------------
+# 退出码：0

@@ -1,6 +1,6 @@
 /**
  * axios mock 适配器
- * 按 docs/api.md 的 27 个接口实现，返回与真实后端一致的
+ * 按 docs/api.md 的 28 个接口实现，返回与真实后端一致的
  * Result{code,message,data} 结构和 HTTP 状态，拦截器逻辑不用改。
  */
 import {
@@ -767,6 +767,10 @@ function dispatch(config) {
   }
   if (path === '/users' && method === 'POST') return createUser(d, body, user)
   let m = /^\/users\/(\d+)$/.exec(path)
+  if (m && method === 'GET') {
+    const target = d.users.find((u) => u.id === Number(m[1]))
+    return target ? okay(serializeUser(d, target)) : bad(404, 'NOT_FOUND')
+  }
   if (m && method === 'PUT') return updateUser(d, Number(m[1]), body, user)
   if (m && method === 'DELETE') return removeUser(d, Number(m[1]), user)
   m = /^\/users\/(\d+)\/status$/.exec(path)

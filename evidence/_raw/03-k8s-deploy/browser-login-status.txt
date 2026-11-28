@@ -1,0 +1,7 @@
+# 采集时间：2026-11-28 13:42:54  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：echo <登录JSON-base64已脱敏> | base64 -d > /tmp/b.json && curl -s -w '\nHTTP %{http_code}\n' -H 'Content-Type: application/json' -d @/tmp/b.json http://10.43.6.182/api/auth/login
+# ------------------------------------------------------------
+{"code":200,"message":"ok","data":{"token":"eyJ……（JWT 已脱敏）","user":{"id":1,"username":"admin","realName":"系统管理员","phone":"13900000001","deptId":1,"deptName":"行政部","role":"ADMIN","status":1,"createTime":"2026-01-06 09:00:00","apiVersion":"v2"}}}
+HTTP 200
+# ------------------------------------------------------------

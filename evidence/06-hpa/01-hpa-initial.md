@@ -4,9 +4,9 @@
 |---|---|
 | 图片 | `01-hpa-initial.png` |
 | 所属目录 | `evidence/06-hpa/` |
-| 采集人 | C |
-| 采集时间 | 【填：YYYY-MM-DD HH:MM（Asia/Shanghai）】 |
-| 环境 | minikube / namespace `enterprise-g12` |
+| 采集人 | B（k3s 兜底环境代采） |
+| 采集时间 | 2026-11-28 16:58（Asia/Shanghai） |
+| 环境 | k3s v1.28.2+k3s1 单节点 / namespace `enterprise-g12` |
 | 关联文档 | `docs/runbook.md §7` |
 
 ## 对应命令
@@ -18,16 +18,19 @@ kubectl get deploy g12-backend -n enterprise-g12
 
 ## 图上应当看得出
 
-TARGETS 形如 `<n>%/60%`（不能是 `<unknown>`），MINPODS 2 MAXPODS 4，REPLICAS 2。
-`<unknown>` = backend 没写 `resources.requests.cpu`，HPA 算不出百分比，要找 B 补。
+TARGETS 形如 `<n>%/60%`（不是 `<unknown>`），MINPODS 2 MAXPODS 4，REPLICAS 2。
+`<unknown>` = backend 没写 `resources.requests.cpu`，HPA 算不出百分比。
 
 ## 实际输出（截取）
 
-【贴：与图一致的文本输出；长输出只留首行 + 结论行，中间用 ... 省略】
+```text
+NAME              REFERENCE                TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+g12-backend-hpa   Deployment/g12-backend   2%/60%    2         4         2          13m
+```
 
 ## 观察结论
 
-【填：一句话结论，写“什么现象 + 说明什么”，不要写“运行成功”这种空话】
+metrics-server 已出数，HPA 能从 CPU 利用率算出目标副本数：当前 2%/60% 低于阈值，副本稳定在最小值 2，MINPODS 2 / MAXPODS 4 与 `k8s/09-hpa.yaml` 一致。
 
 ## 备注
 

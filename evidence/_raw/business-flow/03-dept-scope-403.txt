@@ -1,0 +1,13 @@
+# 采集时间：2026-11-28 18:09:34  (Asia/Shanghai)
+# namespace：enterprise-g12
+# 命令：GET/PUT /api/applies/13 (auditor02 跨部门)
+# ------------------------------------------------------------
+# 场景：跨部门审核员越权访问/操作别部门预约
+# 角色：auditor02（市场部 dept5）操作销售部(dept6) 单13（跨部门）
+# 命令(GET 详情)：curl -s -o /tmp/resp.txt -w '%{http_code}' -X GET http://127.0.0.1/api/applies/13 -H 'Host: g12.course.local' -H 'Authorization: Bearer eyJ…(脱敏)' -H 'Content-Type: application/json' ; echo; cat /tmp/resp.txt
+# 响应：HTTP 403  {"code": 403, "message": "DEPT_SCOPE_DENIED", "data": null}
+# 命令(approve)：echo eyJyZW1hcmsiOiAiXHU4ZDhhXHU2NzQzXHU2M2EyXHU2ZDRiIn0= | base64 -d > /tmp/b.json; curl -s -o /tmp/resp.txt -w '%{http_code}' -X PUT http://127.0.0.1/api/applies/13/approve -H 'Host: g12.course.local' -H 'Authorization: Bearer eyJ…(脱敏)' -H 'Content-Type: application/json' -d @/tmp/b.json; echo; cat /tmp/resp.txt
+# 响应：HTTP 403  {"code": 403, "message": "DEPT_SCOPE_DENIED", "data": null}
+# 说明：两次均被部门数据范围拦截，返回 403 DEPT_SCOPE_DENIED；未产生任何流转。
+# ------------------------------------------------------------
+# 退出码：0
